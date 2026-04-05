@@ -407,15 +407,40 @@ h3 {
   gap: 10px;
 }
 
+.grade-section {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(19, 34, 56, 0.08);
+}
+
+.grade-section-body {
+  display: grid;
+  gap: 14px;
+}
+
+.grade-title,
 .section-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2px;
-  font-size: 1rem;
   color: var(--ink-strong);
 }
 
+.grade-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.grade-title span,
 .section-title span {
   font-family: var(--sans);
   font-size: 0.86rem;

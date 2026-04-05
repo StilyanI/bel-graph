@@ -527,30 +527,10 @@ function renderDetails(visibleNodes, visibleNodeIds) {
     </div>
     <div class="detail-card">
       <p class="detail-label">Навигация</p>
-      <p>Завъртането на колелцето увеличава и намалява, а влаченето с мишката мести изгледа. Клик върху произведение осветява връзките му.</p>
-    </div>
-    <div class="detail-card">
-      <p>Цветовете следват темите от таблицата. Вътрешният пръстен е за първата група произведения, а външният за втората.</p>
+      <p>Кликнете върху крайна точка за да видите нейните връзки. Кликнете върху втора, за да видите връзката между тях.</p>
     </div>
     <div class="section-list">
-      ${renderSectionList(
-        groupBy(visibleNodes, (node) => `${node.grade} · ${node.theme}`),
-        (sectionTitle, items) => `
-          <section class="list-section">
-            <h3 class="section-title">${escapeHtml(sectionTitle)} <span>${items.length}</span></h3>
-            <div class="section-items compact">
-              ${items
-                .map((node) => `
-                  <button type="button" class="mini-node" data-node-id="${node.id}">
-                    <span class="relation-dot" style="background:${node.color}"></span>
-                    ${escapeHtml(node.shortLabel)}
-                  </button>
-                `)
-                .join('')}
-            </div>
-          </section>
-        `,
-      )}
+      ${renderGradeSections(visibleNodes)}
     </div>
   `
 }
@@ -697,6 +677,36 @@ function groupBy(items, keySelector) {
 
 function renderSectionList(groups, renderSection) {
   return groups.map(([title, items]) => renderSection(title, items)).join('')
+}
+
+function renderGradeSections(visibleNodes) {
+  return groupBy(visibleNodes, (node) => node.grade)
+    .map(([grade, gradeNodes]) => `
+      <section class="grade-section">
+        <h3 class="grade-title">${escapeHtml(grade)} <span>${gradeNodes.length}</span></h3>
+        <div class="grade-section-body">
+          ${renderSectionList(
+            groupBy(gradeNodes, (node) => node.theme),
+            (theme, items) => `
+              <section class="list-section">
+                <h4 class="section-title">${escapeHtml(theme)} <span>${items.length}</span></h4>
+                <div class="section-items compact">
+                  ${items
+                    .map((node) => `
+                      <button type="button" class="mini-node" data-node-id="${node.id}">
+                        <span class="relation-dot" style="background:${node.color}"></span>
+                        ${escapeHtml(node.shortLabel)}
+                      </button>
+                    `)
+                    .join('')}
+                </div>
+              </section>
+            `,
+          )}
+        </div>
+      </section>
+    `)
+    .join('')
 }
 
 function escapeHtml(value) {
